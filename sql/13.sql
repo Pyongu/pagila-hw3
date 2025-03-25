@@ -23,7 +23,7 @@ JOIN LATERAL (
         f.film_id,
         f.title,
         SUM(p.amount) AS revenue,
-        ROW_NUMBER() OVER (PARTITION BY fa.actor_id ORDER BY SUM(p.amount) DESC) AS rank  
+        RANK() OVER (PARTITION BY fa.actor_id ORDER BY SUM(p.amount) DESC, f.film_id ASC) AS rank  
     FROM film f
     JOIN film_actor fa ON fa.film_id = f.film_id
     JOIN inventory i ON i.film_id = f.film_id
