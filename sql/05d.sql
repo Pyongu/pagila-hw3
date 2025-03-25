@@ -12,3 +12,34 @@
  * There are many ways to solve this problem,
  * but I personally found the INTERSECT operator to make a convenient solution.
  */
+SELECT f.title
+FROM film f
+INNER JOIN film_actor fa ON f.film_id = fa.film_id
+WHERE fa.actor_id IN (
+    SELECT actor_id
+    FROM film_actor fa1
+    INNER JOIN film f1 ON fa1.film_id = f1.film_id
+    WHERE f1.title = 'AMERICAN CIRCUS'
+)
+INTERSECT
+SELECT f.title
+FROM film f
+INNER JOIN film_actor fa ON f.film_id = fa.film_id
+WHERE fa.actor_id IN (
+    SELECT actor_id
+    FROM film_actor fa2
+    INNER JOIN film f2 ON fa2.film_id = f2.film_id
+    WHERE f2.title = 'ACADEMY DINOSAUR'
+)
+INTERSECT
+SELECT f.title
+FROM film f
+INNER JOIN film_actor fa ON f.film_id = fa.film_id
+WHERE fa.actor_id IN (
+    SELECT actor_id
+    FROM film_actor fa3
+    INNER JOIN film f3 ON fa3.film_id = f3.film_id
+    WHERE f3.title = 'AGENT TRUMAN'
+)
+AND f.title NOT IN ('AMERICAN CIRCUS', 'ACADEMY DINOSAUR', 'AGENT TRUMAN')
+ORDER BY title ASC;

@@ -9,3 +9,16 @@
  * HINT:
  * I used the `ntile` window function to compute the percentile.
  */
+SELECT * FROM (
+    SELECT 
+        customer.customer_id,
+        first_name || ' ' || last_name AS name,
+        SUM(amount) AS total_payment,
+        NTILE(100) OVER (ORDER BY SUM(amount) ASC) AS percentile
+    FROM rental
+    JOIN payment USING (rental_id)
+    JOIN customer on payment.customer_id = customer.customer_id
+    GROUP BY customer.customer_id
+) ranked_customers
+WHERE percentile >= 90
+ORDER BY name ASC;
